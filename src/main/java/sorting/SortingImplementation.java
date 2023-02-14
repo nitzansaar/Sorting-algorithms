@@ -14,7 +14,29 @@ public class SortingImplementation  implements SortingInterface {
      */
     @Override
     public void insertionSort(Comparable[] array, int lowindex, int highindex, boolean reversed) {
-        // FILL ON CODE
+        for (int i = lowindex + 1; i < highindex; i++) {
+            Comparable curr = array[i];
+            int j = i - 1;
+            //stop at lowindex because we are only sorting from low -> high
+            if (reversed) {
+                while (j >= lowindex && array[j].compareTo(curr) < 0) {
+                    array[j + 1] = array[j];
+                    j--;
+                }
+            }else {
+                while (j >= lowindex && array[j].compareTo(curr) > 0) {
+                    array[j + 1] = array[j];
+                    j--;
+                }
+            }
+            //finally put the curr at the correct position
+            array[j + 1] = curr;
+        }
+
+
+
+
+
     }
 
     /**
