@@ -4,6 +4,12 @@ package sorting;
  *   that sort a list of elements. */
 public class SortingImplementation  implements SortingInterface {
 
+    private static void swap(Comparable[] array, int i, int j) {
+        Comparable temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+
     /**
      * Sorts the sublist of the given list (from lowindex to highindex)
      * using insertion sort
@@ -32,11 +38,6 @@ public class SortingImplementation  implements SortingInterface {
             //finally put the curr at the correct position
             array[j + 1] = curr;
         }
-
-
-
-
-
     }
 
     /**
@@ -48,8 +49,26 @@ public class SortingImplementation  implements SortingInterface {
      * @param reversed if true, the list should be sorted in descending order
      */
     public void shakerSort(Comparable[] array, int lowindex, int highindex, boolean reversed) {
-        // FILL ON CODE
+        while(lowindex < highindex) {
+            // bubble max to top
+            for (int i = lowindex; i < highindex; i++) {
+                if (array[i].compareTo(array[i + 1]) > 0) {
+                    swap(array, i, i + 1);
+                }
+            }
+            highindex--;
+            // bubble min to bottom
+            for (int j = highindex; j > lowindex; j--) {
+                if (array[j].compareTo(array[j - 1]) < 0) {
+                        swap(array, j, j-1);
+                }
+            }
+            lowindex++;
+        }
+
     }
+
+
 
 
     /**
