@@ -4,10 +4,67 @@ import java.util.Random;
  *   that sort a list of elements. */
 public class SortingImplementation  implements SortingInterface {
 
+    private static final int THRESHOLD = 11;
+
     private static void swap(Comparable[] array, int i, int j) {
         Comparable temp = array[i];
         array[i] = array[j];
         array[j] = temp;
+    }
+    private static Random rand = new Random();
+    private static int partition(Comparable[] array, int lowindex, int highindex) {
+        // get 3 random indices in the array
+        int[] indices = {rand.nextInt(highindex - lowindex + 1) + lowindex,
+                rand.nextInt(highindex - lowindex + 1) + lowindex,
+                rand.nextInt(highindex - lowindex + 1) + lowindex};
+        int pivotIndex = getMedianIndex(array, indices[0], indices[1], indices[2]);
+        Comparable pivotElem = array[pivotIndex];
+        // swap pivot with last element
+        swap(array, pivotIndex, highindex);
+        int i = lowindex;
+        int j = highindex;
+
+        while (i <= j) {
+            // increment left until element is greater than pivot
+            while(i <= j && array[i].compareTo(pivotElem) < 0) {
+                i++;
+            }
+            // decrement right until element is smaller than pivot
+            while(i <= j && array[j].compareTo(pivotElem) >= 0) {
+                j--;
+            }
+            // swap if i & j are stuck and i < j
+            if(i < j){
+                swap(array, i, j);
+                i++;
+                j--;
+            }
+        }
+        // put the pivot in the correct position
+        swap(array, i, highindex);
+        // now everything to left of pivot is smaller and everything to the right is bigger
+        return i;
+    }
+
+    private static int getMedianIndex(Comparable[] arr, int a, int b, int c) {
+        if (arr[a].compareTo(arr[b]) < 0) {
+            if (arr[b].compareTo(arr[c]) < 0) {
+                return b;
+            } else if (arr[a].compareTo(arr[c]) < 0) {
+                return c;
+            } else {
+                return a;
+            }
+        } else {
+            if (arr[a].compareTo(arr[c]) < 0) {
+                return a;
+            } else if (arr[b].compareTo(arr[c]) < 0) {
+                return c;
+            } else {
+                return b;
+            }
+        }
+
     }
 
     /**
@@ -20,7 +77,7 @@ public class SortingImplementation  implements SortingInterface {
      */
     @Override
     public void insertionSort(Comparable[] array, int lowindex, int highindex, boolean reversed) {
-        for (int i = lowindex + 1; i < highindex; i++) {
+        for (int i = lowindex; i < highindex + 1; i++) {
             Comparable curr = array[i];
             int j = i - 1;
             //stop at lowindex because we are only sorting from low -> high
@@ -83,61 +140,7 @@ public class SortingImplementation  implements SortingInterface {
 
     }
 
-    private static Random rand = new Random();
-    private static int partition(Comparable[] array, int lowindex, int highindex) {
-        // get 3 random indices in the array
-        int[] indices = {rand.nextInt(highindex - lowindex + 1) + lowindex,
-                rand.nextInt(highindex - lowindex + 1) + lowindex,
-                rand.nextInt(highindex - lowindex + 1) + lowindex};
-        int pivotIndex = getMedianIndex(array, indices[0], indices[1], indices[2]);
-        Comparable pivotElem = array[pivotIndex];
-        // swap pivot with last element
-        swap(array, pivotIndex, highindex);
-        int i = lowindex;
-        int j = highindex;
 
-        while (i <= j) {
-            // increment left until element is greater than pivot
-            while(i <= j && array[i].compareTo(pivotElem) < 0) {
-                i++;
-            }
-            // decrement right until element is smaller than pivot
-            while(i <= j && array[j].compareTo(pivotElem) >= 0) {
-                j--;
-            }
-            // swap if i & j are stuck and i < j
-            if(i < j){
-                swap(array, i, j);
-                i++;
-                j--;
-            }
-        }
-        // put the pivot in the correct position
-        swap(array, i, highindex);
-        // now everything to left of pivot is smaller and everything to the right is bigger
-        return i;
-    }
-
-    private static int getMedianIndex(Comparable[] arr, int a, int b, int c) {
-        if (arr[a].compareTo(arr[b]) < 0) {
-            if (arr[b].compareTo(arr[c]) < 0) {
-                return b;
-            } else if (arr[a].compareTo(arr[c]) < 0) {
-                return c;
-            } else {
-                return a;
-            }
-        } else {
-            if (arr[a].compareTo(arr[c]) < 0) {
-                return a;
-            } else if (arr[b].compareTo(arr[c]) < 0) {
-                return c;
-            } else {
-                return b;
-            }
-        }
-
-    }
 
     /**
      * Sorts the sublist of the given list (from lowindex to highindex)
@@ -148,10 +151,8 @@ public class SortingImplementation  implements SortingInterface {
      */
     @Override
     public void randomizedQuickSort(Comparable[] array, int lowindex, int highindex) {
-        int pivotIndex;
-        // when the subarray has only one element, nothing happens
         if (lowindex < highindex) {
-            pivotIndex = partition(array, lowindex, highindex);
+            int pivotIndex = partition(array, lowindex, highindex);
             randomizedQuickSort(array, lowindex, pivotIndex - 1);
             randomizedQuickSort(array, pivotIndex + 1, highindex);
         }
@@ -167,8 +168,15 @@ public class SortingImplementation  implements SortingInterface {
      */
     @Override
     public void hybridSort(Comparable[] array, int lowindex, int highindex) {
-        // FILL ON CODE
-
+        if (lowindex < highindex) {
+            if ((highindex - lowindex + 1) <= THRESHOLD){
+                insertionSort(array, lowindex, highindex, false);
+            }else {
+                int pivotIndex = partition(array, lowindex, highindex);
+                hybridSort(array, lowindex, pivotIndex - 1);
+                hybridSort(array, pivotIndex + 1, highindex);
+            }
+        }
     }
 
     /**
