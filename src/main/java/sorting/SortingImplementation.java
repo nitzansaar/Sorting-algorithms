@@ -1,4 +1,6 @@
 package sorting;
+import java.io.*;
+import java.util.Arrays;
 import java.util.Random;
 /**  A class that implements SortingInterface. Contains methods
  *   that sort a list of elements. */
@@ -12,6 +14,7 @@ public class SortingImplementation  implements SortingInterface {
         array[j] = temp;
     }
     private static Random rand = new Random();
+
     private static int partition(Comparable[] array, int lowindex, int highindex) {
         // get 3 random indices in the array
         int[] indices = {rand.nextInt(highindex - lowindex + 1) + lowindex,
@@ -77,7 +80,7 @@ public class SortingImplementation  implements SortingInterface {
      */
     @Override
     public void insertionSort(Comparable[] array, int lowindex, int highindex, boolean reversed) {
-        for (int i = lowindex; i < highindex + 1; i++) {
+        for (int i = lowindex + 1; i <= highindex; i++) {
             Comparable curr = array[i];
             int j = i - 1;
             //stop at lowindex because we are only sorting from low -> high
@@ -206,6 +209,49 @@ public class SortingImplementation  implements SortingInterface {
 
     }
 
+    private void breakUpFile(String filename, int chunkSize, int numChunks) throws IOException {
+        File file = new File(filename);
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        Comparable[] chunks = new Comparable[chunkSize];
+        String line;
+        int count = 0;
+        int numFiles = 0;
+        while ((line = br.readLine()) != null) {
+            chunks[count++] = Integer.parseInt(line);
+            if (count == chunkSize) {
+                // sort the chunks using hybridSort
+                hybridSort(chunks, 0, chunks.length - 1);
+                // store sorted array into temp file
+                String tempFileName = "temp" + (numFiles++) + ".txt";
+                File tempFile = new File(tempFileName);
+                BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile));
+                for (int i = 0; i < chunkSize; i++) {
+                    bw.write(String.valueOf(chunks[i]));
+                    bw.newLine();
+                }
+                bw.close();
+                count = 0;
+            }
+        }
+        // clean up leftovers
+        if (numFiles < numChunks) {
+            Comparable[] leftovers = new Comparable[count];
+            for (int i = 0; i < count; i++) {
+                leftovers[i] = chunks[i];
+            }
+            hybridSort(leftovers, 0, leftovers.length - 1);
+            String tempFileName = "temp" + numFiles + ".txt";
+            File tempFile = new File(tempFileName);
+            BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile));
+            for (int i = 0; i < count; i++) {
+                bw.write(String.valueOf(leftovers[i]));
+                bw.newLine();
+            }
+            bw.close();
+        }
+        br.close();
+    }
+
     /**
      * Implements external sort method
      * @param inputFile The file that contains the input list
@@ -214,7 +260,35 @@ public class SortingImplementation  implements SortingInterface {
      * @param m number of chunks
      */
     public void externalSort(String inputFile, String outputFile, int k, int m) {
-        // FILL IN CODE
+        try {
+            breakUpFile(inputFile, k, m);
+            BufferedReader[] bufferedReaders = new BufferedReader[m];
+            for (int i = 0; i < m; i++) {
+                String fileName = "temp" + i + ".txt";
+                File file = new File(fileName);
+                try {
+                    bufferedReaders[i] = new BufferedReader(new FileReader(file));
+                } catch (FileNotFoundException e) {
+                    System.out.println("File doesn't exist: " + fileName);// need to revise
+                    throw new RuntimeException(e);
+                }
+            }
+            // store the first element from each file into an array
+            int[] elements = new int[m];
+            for (int i = 0; i < m; i++) {
+                String line = bufferedReaders[i].readLine();
+                if (line != null) {
+                    elements[i] = Integer.parseInt(line);
+                } else {
+                    elements[i] = Integer.MAX_VALUE;
+                }
+            }
+
+        } catch (IOException e) {
+            System.out.println("File doesn't exist: " + inputFile);
+            throw new RuntimeException(e);
+        }
+
 
     }
 

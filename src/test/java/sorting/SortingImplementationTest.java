@@ -17,6 +17,7 @@ class SortingImplementationTest extends SortingImplementation {
         }
         return true;
     }
+
     private static Integer[] generateRandomArray(int size) {
         Integer[] arr = new Integer[size];
         Random rand = new Random();
@@ -35,7 +36,6 @@ class SortingImplementationTest extends SortingImplementation {
         }
         return arr;
     }
-
 
     @Test
     void testHybridAndQuickSort() {
@@ -85,9 +85,6 @@ class SortingImplementationTest extends SortingImplementation {
 
             System.out.println("Array size: " + size);
             System.out.println("Array of random numbers:");
-            System.out.println("Quick sort time: " + randQuickTime);
-            System.out.println("Hyrbid sort time: " + randHybridTime);
-
 
             if (randHybridTime < randQuickTime) {
                 System.out.println("Hybrid is faster by: " + (randQuickTime - randHybridTime) + "s");
@@ -123,17 +120,26 @@ class SortingImplementationTest extends SortingImplementation {
     @Test
     void testInsertionSort() {
         Integer arr[] = generateRandomArray(10);
-        System.out.println(Arrays.toString(arr));
-        System.out.println(arr.length);
         insertionSort(arr, 0, arr.length - 1, false);
-        System.out.println(Arrays.toString(arr));
+        assertTrue(isSorted(arr));
     }
 
     @Test
     void testRandomizedQuickSort() {
         Integer arr[] = generateRandomArray(10);
-        System.out.println(Arrays.toString(arr));
         randomizedQuickSort(arr, 0, arr.length - 1);
-        System.out.println(Arrays.toString(arr));
+        assertTrue(isSorted(arr));
+    }
+
+    @Test
+    void testShakerSort() {
+        Integer arr[] = generateRandomArray(10);
+        shakerSort(arr, 0, arr.length - 1, false);
+        assertTrue(isSorted(arr));
+    }
+
+    @Test
+    void testExternalSort() {
+        externalSort("testFile", "testFile2", 2, 11);
     }
 }
