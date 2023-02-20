@@ -1,6 +1,5 @@
 package sorting;
 import java.io.*;
-import java.util.Arrays;
 import java.util.Random;
 /**  A class that implements SortingInterface. Contains methods
  *   that sort a list of elements. */
@@ -209,7 +208,7 @@ public class SortingImplementation  implements SortingInterface {
 
     }
 
-    private void breakUpFile(String filename, int chunkSize, int numChunks) throws IOException {
+    private void parseFile(String filename, int chunkSize, int numChunks) throws IOException {
         File file = new File(filename);
         BufferedReader br = new BufferedReader(new FileReader(file));
         Comparable[] chunks = new Comparable[chunkSize];
@@ -218,22 +217,28 @@ public class SortingImplementation  implements SortingInterface {
         int numFiles = 0;
         while ((line = br.readLine()) != null) {
             chunks[count++] = Integer.parseInt(line);
+            // if count = chunkSize, we have k elements in the array and need to stop adding elements
             if (count == chunkSize) {
-                // sort the chunks using hybridSort
+                // sort the chunks using hybridSort (can use any sorting algorithm)
                 hybridSort(chunks, 0, chunks.length - 1);
                 // store sorted array into temp file
                 String tempFileName = "temp" + (numFiles++) + ".txt";
                 File tempFile = new File(tempFileName);
+                // create new buffered writer for temp file
                 BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile));
                 for (int i = 0; i < chunkSize; i++) {
                     bw.write(String.valueOf(chunks[i]));
+                    // add new line because we want each element on a separate line
                     bw.newLine();
                 }
                 bw.close();
+                //reset count
                 count = 0;
             }
         }
-        // clean up leftovers
+
+        // if numFiles is less than numChunks, it means there are still a few elements
+        // in the file (less than k)
         if (numFiles < numChunks) {
             Comparable[] leftovers = new Comparable[count];
             for (int i = 0; i < count; i++) {
@@ -261,7 +266,9 @@ public class SortingImplementation  implements SortingInterface {
      */
     public void externalSort(String inputFile, String outputFile, int k, int m) {
         try {
-            breakUpFile(inputFile, k, m);
+            File output = new File(outputFile);
+            BufferedWriter outputWriter = new BufferedWriter(new FileWriter(output));
+            parseFile(inputFile, k, m);
             BufferedReader[] bufferedReaders = new BufferedReader[m];
             for (int i = 0; i < m; i++) {
                 String fileName = "temp" + i + ".txt";
@@ -280,16 +287,44 @@ public class SortingImplementation  implements SortingInterface {
                 if (line != null) {
                     elements[i] = Integer.parseInt(line);
                 } else {
+                    // we write infinity to note that the file is empty
                     elements[i] = Integer.MAX_VALUE;
                 }
             }
 
+            // runs until we reach a break statement
+            while (true) {
+                // now we need to determine the min element and its index
+                int min = Integer.MAX_VALUE;
+                int minIndex = -1;
+                for (int i = 0; i < m; i++) {
+                    if (elements[i] < min) {
+                        min = elements[i];
+                        minIndex = i;
+                    }
+                }
+                // if minIndex is -1 we know that all values being read are infinity and we can break
+                if (minIndex == -1) {
+                    break;
+                }
+                // now we need to write the min element to the output file
+                outputWriter.write(String.valueOf(min));
+                outputWriter.newLine();
+
+                // read next line from bufferedReader at the min index and replace it with
+                // the min element we just wrote to output file
+                String line = bufferedReaders[minIndex].readLine();
+                if (line != null) {
+                    elements[minIndex] = Integer.parseInt(line);
+                } else {
+                    elements[minIndex] = Integer.MAX_VALUE;
+                }
+            }
+            outputWriter.close();
         } catch (IOException e) {
             System.out.println("File doesn't exist: " + inputFile);
             throw new RuntimeException(e);
         }
-
-
     }
 
     /**
