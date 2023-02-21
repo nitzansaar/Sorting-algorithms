@@ -146,8 +146,9 @@ class SortingImplementationTest extends SortingImplementation {
     @Test
     void testSortAndFindWinner() {
         String[] arr = {"C", "C", "C", "B", "A", "A", "A", "C", "B", "B", "A", "B", "B", "A", "C", "C", "C", "C", "B", "B" };
-        sortAndFindWinner(arr);
+        String winner = sortAndFindWinner(arr);
         assertTrue(isSorted(arr));
+        assertTrue(winner.equals("C"));
         System.out.println(Arrays.toString(arr));
     }
 }
