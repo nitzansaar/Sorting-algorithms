@@ -1,5 +1,6 @@
 package sorting;
 import java.io.*;
+import java.util.Arrays;
 import java.util.Random;
 /**  A class that implements SortingInterface. Contains methods
  *   that sort a list of elements. */
@@ -349,6 +350,7 @@ public class SortingImplementation  implements SortingInterface {
         int i = 0;
         int j = votes.length - 1;
         // move 'A' to the front of the array
+        // O(n)
         while (i <= j) {
             // decrement j until we get to 'A'
             if (votes[j].equals("B")  || votes[j].equals("C")) {
@@ -359,8 +361,10 @@ public class SortingImplementation  implements SortingInterface {
                 swap(votes, i++, j);
             }
         }
+        int aVotes = i;
         j = votes.length - 1;
-        while (i < j) {
+        // O(n)
+        while (i <= j) {
             while (i < j && votes[i].equals("B")) {
                 i++;
             }
@@ -369,7 +373,12 @@ public class SortingImplementation  implements SortingInterface {
             }
             swap(votes, i++, j--);
         }
-        return "";
+        if (aVotes > (i - aVotes) && aVotes > (votes.length - i)) {
+            return "A";
+        } else if ((i - aVotes) > aVotes && (i - aVotes) > (votes.length - i)) {
+            return "B";
+        }
+        return "C";
 
     }
 
@@ -378,5 +387,7 @@ public class SortingImplementation  implements SortingInterface {
     // Research and implement one more sorting method that we did not discuss in class.
     // Do not copy code from the web. Implement the algorithm yourself.
     // Describe it in a Readme file.
+
+
 
 }
