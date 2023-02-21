@@ -142,4 +142,11 @@ class SortingImplementationTest extends SortingImplementation {
     void testExternalSort() {
         externalSort("testFile", "testFile2", 2, 11);
     }
+
+    @Test
+    void testSortAndFindWinner() {
+        String[] arr = {"C", "B", "C", "A", "C", "A", "B", "A", "A", "A", "C", "B", "B", "A"};
+        sortAndFindWinner(arr);
+        System.out.println(Arrays.toString(arr));
+    }
 }

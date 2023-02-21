@@ -69,6 +69,55 @@ public class SortingImplementation  implements SortingInterface {
 
     }
 
+    private void parseFile(String filename, int chunkSize, int numChunks) throws IOException {
+        File file = new File(filename);
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        Comparable[] chunks = new Comparable[chunkSize];
+        String line;
+        int count = 0;
+        int numFiles = 0;
+        while ((line = br.readLine()) != null) {
+            chunks[count++] = Integer.parseInt(line);
+            // if count = chunkSize, we have k elements in the array and need to stop adding elements
+            if (count == chunkSize) {
+                // sort the chunks using hybridSort (can use any sorting algorithm)
+                hybridSort(chunks, 0, chunks.length - 1);
+                // store sorted array into temp file
+                String tempFileName = "temp" + (numFiles++) + ".txt";
+                File tempFile = new File(tempFileName);
+                // create new buffered writer for temp file
+                BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile));
+                for (int i = 0; i < chunkSize; i++) {
+                    bw.write(String.valueOf(chunks[i]));
+                    // add new line because we want each element on a separate line
+                    bw.newLine();
+                }
+                bw.close();
+                //reset count
+                count = 0;
+            }
+        }
+
+        // if numFiles is less than numChunks, it means there are still a few elements
+        // in the file (less than k)
+        if (numFiles < numChunks) {
+            Comparable[] leftovers = new Comparable[count];
+            for (int i = 0; i < count; i++) {
+                leftovers[i] = chunks[i];
+            }
+            hybridSort(leftovers, 0, leftovers.length - 1);
+            String tempFileName = "temp" + numFiles + ".txt";
+            File tempFile = new File(tempFileName);
+            BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile));
+            for (int i = 0; i < count; i++) {
+                bw.write(String.valueOf(leftovers[i]));
+                bw.newLine();
+            }
+            bw.close();
+        }
+        br.close();
+    }
+
     /**
      * Sorts the sublist of the given list (from lowindex to highindex)
      * using insertion sort
@@ -208,55 +257,6 @@ public class SortingImplementation  implements SortingInterface {
 
     }
 
-    private void parseFile(String filename, int chunkSize, int numChunks) throws IOException {
-        File file = new File(filename);
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        Comparable[] chunks = new Comparable[chunkSize];
-        String line;
-        int count = 0;
-        int numFiles = 0;
-        while ((line = br.readLine()) != null) {
-            chunks[count++] = Integer.parseInt(line);
-            // if count = chunkSize, we have k elements in the array and need to stop adding elements
-            if (count == chunkSize) {
-                // sort the chunks using hybridSort (can use any sorting algorithm)
-                hybridSort(chunks, 0, chunks.length - 1);
-                // store sorted array into temp file
-                String tempFileName = "temp" + (numFiles++) + ".txt";
-                File tempFile = new File(tempFileName);
-                // create new buffered writer for temp file
-                BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile));
-                for (int i = 0; i < chunkSize; i++) {
-                    bw.write(String.valueOf(chunks[i]));
-                    // add new line because we want each element on a separate line
-                    bw.newLine();
-                }
-                bw.close();
-                //reset count
-                count = 0;
-            }
-        }
-
-        // if numFiles is less than numChunks, it means there are still a few elements
-        // in the file (less than k)
-        if (numFiles < numChunks) {
-            Comparable[] leftovers = new Comparable[count];
-            for (int i = 0; i < count; i++) {
-                leftovers[i] = chunks[i];
-            }
-            hybridSort(leftovers, 0, leftovers.length - 1);
-            String tempFileName = "temp" + numFiles + ".txt";
-            File tempFile = new File(tempFileName);
-            BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile));
-            for (int i = 0; i < count; i++) {
-                bw.write(String.valueOf(leftovers[i]));
-                bw.newLine();
-            }
-            bw.close();
-        }
-        br.close();
-    }
-
     /**
      * Implements external sort method
      * @param inputFile The file that contains the input list
@@ -346,9 +346,31 @@ public class SortingImplementation  implements SortingInterface {
      * @return winner
      */
     public String sortAndFindWinner (String[] votes) {
-        // FILL IN CODE
+        int i = 0;
+        int j = votes.length - 1;
+        // move 'A' to the front of the array
+        while (i <= j) {
+            // decrement j until we get to 'A'
+            if (votes[j].equals("B")  || votes[j].equals("C")) {
+                j--;
+            }
+            // once we are at 'A', swap and increment i
+            else {
+                swap(votes, i++, j);
+            }
+        }
+        j = votes.length - 1;
+        while (i < j) {
+            while (i < j && votes[i].equals("B")) {
+                i++;
+            }
+            while (i < j && votes[j].equals("C")) {
+                j--;
+            }
+            swap(votes, i++, j--);
+        }
+        return "";
 
-        return ""; // replace
     }
 
 
