@@ -277,7 +277,7 @@ public class SortingImplementation  implements SortingInterface {
                 try {
                     bufferedReaders[i] = new BufferedReader(new FileReader(file));
                 } catch (FileNotFoundException e) {
-                    System.out.println("File doesn't exist: " + fileName);// need to revise
+                    System.out.println("Invalid File: " + fileName);// need to revise
                     throw new RuntimeException(e);
                 }
             }
@@ -388,6 +388,40 @@ public class SortingImplementation  implements SortingInterface {
     // Do not copy code from the web. Implement the algorithm yourself.
     // Describe it in a Readme file.
 
+
+
+    /**
+     * only works if you know the max value
+     * does not work if there are negative numbers in the array
+     * @param arr the input array to be sorted
+     * @param max the max value within the array (necessary for this sorting algorithm)
+     */
+    public static void countingSort(int[] arr, int max) {
+        int range = max + 1;
+        // represents the number of each integer (index represents integer)
+        int[] counts = new int[range];
+        for (int i = 0; i < arr.length; i++) {
+            counts[arr[i]]++;
+        }
+
+        // now we need to get the index of each integer
+        for (int i = 1; i < counts.length; i++) {
+            counts[i] += counts[i - 1];
+        }
+
+        // place elements into their correct position
+        int[] output = new int[arr.length];
+        for (int i = arr.length - 1; i >= 0; i--) {
+            output[counts[arr[i]] - 1] = arr[i];
+            // decrement the count so that when we place the next element, it will be in the right place
+            counts[arr[i]]--;
+        }
+
+        // copy output array back to original array
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = output[i];
+        }
+    }
 
 
 }

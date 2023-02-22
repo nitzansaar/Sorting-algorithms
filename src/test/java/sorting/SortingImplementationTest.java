@@ -29,7 +29,6 @@ class SortingImplementationTest extends SortingImplementation {
 
     private static Integer[] generateSortedArray(int size, boolean ascending) {
         Integer[] arr = new Integer[size];
-        Random rand = new Random();
         for (int i = 0; i < size; i++) {
             // if ascending is true -> i , if false -> size - i
             arr[i] = ascending ? i : size - i;
@@ -150,5 +149,13 @@ class SortingImplementationTest extends SortingImplementation {
         assertTrue(isSorted(arr));
         assertTrue(winner.equals("C"));
         System.out.println(Arrays.toString(arr));
+    }
+
+    @Test
+    void testCountingSort() {
+        int[] arr = {6, 4, 2, 1, 1, 1, 2, 3, 4, 5, 6, 6, 6};
+        countingSort(arr,  6);
+        System.out.println(Arrays.toString(arr));
+
     }
 }
