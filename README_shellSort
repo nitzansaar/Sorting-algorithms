@@ -1,4 +1,4 @@
 Shell sort works by first dividing the input array into n/2 subarrays and using insertion sort on those subarrays. After that,
 the gap size is reduced by a factor of 1/2 and insertion sort is used again. The process repeats until we sort a single sublist of length n.
 By reducing the size of the sublists, we ensure that the list gets more and more sorted. The idea behind shell sort is that insertion sort is
-very fast for sorted arrays, so we can make the list mostly sorted and use insertion sort at its best.
+very fast for sorted arrays (O(n)), so we can make the list mostly sorted and use insertion sort at its best.

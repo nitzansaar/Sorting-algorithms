@@ -1,8 +1,6 @@
 package sorting;
 
 import org.junit.jupiter.api.Test;
-import sorting.Elem;
-import sorting.SortingImplementation;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -12,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class Nitzan_Tests extends SortingImplementation {
 
     /*
-    This is the test method I used to compare the efficiency of Quick Sort and Hybrid Sort
+    This is the test method I used to compare the efficiency of Randomized Quick Sort and Hybrid Sort
     described in the README_hybridSort
      */
     @Test
@@ -138,14 +136,12 @@ class Nitzan_Tests extends SortingImplementation {
         System.out.println(Arrays.toString(arr));
     }
 
-
     @Test
     void testBucketSort() {
-        System.out.println("\nTesting bucket sort");
+        System.out.println("\nTesting Bucket Sort");
         Elem arr[] = {new Elem(114, "Dog"), new Elem(26, "Owl"), new Elem(50, "Hamster"),
                 new Elem(155, "Cat"), new Elem(44, "squirrel"), new Elem(111, "fish"), new Elem(4, "monkey"),
                 new Elem(95, "lobster"), new Elem(151, "snake"), new Elem(200, "elephant"), new Elem(12, "bear")};
-        //System.out.println(Arrays.toString(arr));
         bucketSort(arr, 0, arr.length - 1, false);
         System.out.println(Arrays.toString(arr));
         bucketSort(arr, 0, arr.length - 1, true);
@@ -157,10 +153,6 @@ class Nitzan_Tests extends SortingImplementation {
         Integer arr[] = generateRandomArray(1000);
         shellSort(arr);
         assertTrue(isSorted(arr));
-
-
-
-
     }
     private static boolean isSortedDescending(Comparable[] arr) {
         for (int i = 1; i < arr.length; i++) {

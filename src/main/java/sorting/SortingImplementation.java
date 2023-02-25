@@ -8,9 +8,7 @@ import java.util.*;
  * that sort a list of elements.
  */
 public class SortingImplementation implements SortingInterface {
-
     private static final int THRESHOLD = 10;
-
 
     /**
      * Sorts the sublist of the given list (from lowindex to highindex)
@@ -86,7 +84,6 @@ public class SortingImplementation implements SortingInterface {
         }
 
     }
-
 
     /**
      * Sorts the sublist of the given list (from lowindex to highindex)
@@ -186,7 +183,7 @@ public class SortingImplementation implements SortingInterface {
      */
     @Override
     public void radixSort(int[] array, int lowindex, int highindex, boolean reversed) {
-        // FILL IN CODE
+        // Removed from project
 
     }
 
@@ -323,6 +320,7 @@ public class SortingImplementation implements SortingInterface {
 
     /**
      * Sorts an array of comparables using Shell sort (variation of insertion sort)
+     *
      * @param array input array of comparables
      */
     public void shellSort(Comparable[] array) {
@@ -481,6 +479,9 @@ public class SortingImplementation implements SortingInterface {
         it.add(elem);
     }
 
+    /*
+    Helper for bucket sort
+     */
     private static int getMax(Elem[] arr, int low, int high) {
         int max = arr[low].key();
         for (int i = low + 1; i <= high; i++) {
@@ -492,6 +493,9 @@ public class SortingImplementation implements SortingInterface {
         return max;
     }
 
+    /*
+    Helper for bucket sort
+    */
     private static int getMin(Elem[] arr, int low, int high) {
         int min = arr[low].key();
         for (int i = low + 1; i <= high; i++) {
