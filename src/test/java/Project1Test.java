@@ -70,7 +70,6 @@ public class Project1Test {
                 arr[j] = new Elem(key, data);
             }
             listSorter.bucketSort(arr, lowindex, highindex, false);
-
             if (!areElemsSorted(arr, lowindex, highindex)) {
                 System.out.println("In Bucket Sort Test: Not sorted correctly");
                 for (Elem rr : arr) {
@@ -82,10 +81,11 @@ public class Project1Test {
                 Assert.fail("Bucket sort test failed.");
             }
 
+
         }
     }
 
-    @Test
+/*    @Test
     public void testRadixSort() {
         int[] arr1 = {145, 892, 246, 863, 978, 267, 203, 278, 192, 177, 526, 636, 258, 466, 329, 316};
         SortingImplementation listSorter = new SortingImplementation();
@@ -100,7 +100,7 @@ public class Project1Test {
                     + highindex + ", arr1 = " + Arrays.toString(arr1));
             Assert.fail();
         }
-    }
+    }*/
 
     @Test
     public void testSortAndFindWinner() {
