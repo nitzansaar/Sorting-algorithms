@@ -1,13 +1,15 @@
 package sorting;
 
 import org.junit.jupiter.api.Test;
+import sorting.Elem;
+import sorting.SortingImplementation;
 
 import java.util.Arrays;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SortingAlgorithmTests extends SortingImplementation {
+class Nitzan_Tests extends SortingImplementation {
 
     /*
     This is the test method I used to compare the efficiency of Quick Sort and Hybrid Sort
@@ -89,7 +91,7 @@ class SortingAlgorithmTests extends SortingImplementation {
 
     @Test
     void testInsertionSort() {
-        System.out.println("Testing Insertion Sort");
+        System.out.println("\nTesting Insertion Sort");
         Integer arr[] = generateRandomArray(10);
         insertionSort(arr, 0, arr.length - 1, false);
         assertTrue(isSorted(arr));
@@ -101,7 +103,7 @@ class SortingAlgorithmTests extends SortingImplementation {
 
     @Test
     void testRandomizedQuickSort() {
-        System.out.println("Randomized Quick Sort");
+        System.out.println("\nRandomized Quick Sort");
         Integer arr[] = generateRandomArray(10);
         randomizedQuickSort(arr, 0, arr.length - 1);
         assertTrue(isSorted(arr));
@@ -128,7 +130,7 @@ class SortingAlgorithmTests extends SortingImplementation {
 
     @Test
     void testSortAndFindWinner() {
-        System.out.println("Testing Sort & Find Winner");
+        System.out.println("\nTesting Sort & Find Winner");
         String[] arr = {"C", "C", "C", "B", "A", "A", "A", "C", "B", "B", "A", "B", "B", "A", "C", "C", "C", "C", "B", "B" };
         String winner = sortAndFindWinner(arr);
         assertTrue(isSorted(arr));
@@ -139,14 +141,26 @@ class SortingAlgorithmTests extends SortingImplementation {
 
     @Test
     void testBucketSort() {
+        System.out.println("\nTesting bucket sort");
         Elem arr[] = {new Elem(114, "Dog"), new Elem(26, "Owl"), new Elem(50, "Hamster"),
                 new Elem(155, "Cat"), new Elem(44, "squirrel"), new Elem(111, "fish"), new Elem(4, "monkey"),
                 new Elem(95, "lobster"), new Elem(151, "snake"), new Elem(200, "elephant"), new Elem(12, "bear")};
-        System.out.println(Arrays.toString(arr));
+        //System.out.println(Arrays.toString(arr));
         bucketSort(arr, 0, arr.length - 1, false);
         System.out.println(Arrays.toString(arr));
         bucketSort(arr, 0, arr.length - 1, true);
         System.out.println(Arrays.toString(arr));
+    }
+
+    @Test
+    void testShellSort() {
+        Integer arr[] = generateRandomArray(1000);
+        shellSort(arr);
+        assertTrue(isSorted(arr));
+
+
+
+
     }
     private static boolean isSortedDescending(Comparable[] arr) {
         for (int i = 1; i < arr.length; i++) {

@@ -155,7 +155,7 @@ public class SortingImplementation implements SortingInterface {
         // put keys into correct bucket
         for (int i = lowindex; i <= highindex; i++) {
             int bucketIndex = (array[i].key() - min) / bucketSize;
-            insertSorted(buckets[bucketIndex], array[i], reversed);
+            addToLinkedList(buckets[bucketIndex], array[i], reversed);
         }
         int insertIndex = lowindex;
         if (!reversed) {
@@ -320,6 +320,28 @@ public class SortingImplementation implements SortingInterface {
     // Research and implement one more sorting method that we did not discuss in class.
     // Do not copy code from the web. Implement the algorithm yourself.
     // Describe it in a Readme file.
+
+    /**
+     * Sorts an array of comparables using Shell sort (variation of insertion sort)
+     * @param array input array of comparables
+     */
+    public void shellSort(Comparable[] array) {
+        int n = array.length;
+        for (int i = n / 2; i > 0; i /= 2) {
+            for (int j = i; j < n; j++) {
+                Comparable temp = array[j];
+                int k = j;
+                while (k >= i && array[k - i].compareTo(temp) > 0) {
+                    array[k] = array[k - i];
+                    k -= i;
+                }
+                // insert temp into correct position
+                array[k] = temp;
+            }
+        }
+    }
+
+
     private static void swap(Comparable[] array, int i, int j) {
         Comparable temp = array[i];
         array[i] = array[j];
@@ -444,7 +466,7 @@ public class SortingImplementation implements SortingInterface {
     /*
     Helper Method for BucketSort
      */
-    private void insertSorted(LinkedList<Elem> bucket, Elem elem, boolean reversed) {
+    private void addToLinkedList(LinkedList<Elem> bucket, Elem elem, boolean reversed) {
         ListIterator<Elem> it = bucket.listIterator();
         while (it.hasNext()) {
             Elem curr = it.next();
@@ -458,6 +480,7 @@ public class SortingImplementation implements SortingInterface {
         // if we get to here it means that the element is the largest in the linkedlist and we add it to the end
         it.add(elem);
     }
+
     private static int getMax(Elem[] arr, int low, int high) {
         int max = arr[low].key();
         for (int i = low + 1; i <= high; i++) {
@@ -468,9 +491,10 @@ public class SortingImplementation implements SortingInterface {
         }
         return max;
     }
+
     private static int getMin(Elem[] arr, int low, int high) {
         int min = arr[low].key();
-        for (int i = low + 1; i <= high ; i++) {
+        for (int i = low + 1; i <= high; i++) {
             int current = arr[i].key();
             if (current < min) {
                 min = current;
